@@ -9,6 +9,7 @@ import com.certify.model.FormField;
 import com.certify.model.Seminar;
 import com.certify.model.ShareLink;
 import com.certify.model.Submission;
+import com.certify.util.InputValidator;
 import com.certify.util.PdfGenerator;
 import com.certify.util.WebUtil;
 import javax.servlet.ServletException;
@@ -19,13 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.regex.Pattern;
 
 @WebServlet("/c/*")
 public class PublicCertificateServlet extends HttpServlet {
-    private static final Pattern EMAIL = Pattern.compile("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
-    private static final Pattern PHONE = Pattern.compile("^[0-9+\\-\\s]{8,20}$");
-
     private final ShareLinkDao links = new ShareLinkDao();
     private final SeminarDao seminars = new SeminarDao();
     private final FieldPositionDao positions = new FieldPositionDao();
@@ -73,8 +70,8 @@ public class PublicCertificateServlet extends HttpServlet {
         sub.setFullName(WebUtil.trim(req.getParameter(FormField.FULL_NAME.key())));
         sub.setEmail(WebUtil.trim(req.getParameter(FormField.EMAIL.key())));
         sub.setPhone(WebUtil.trim(req.getParameter(FormField.PHONE.key())));
-        sub.setCollege(WebUtil.trim(req.getParameter(FormField.COLLEGE.key())));
-        sub.setEnrollmentNo(WebUtil.trim(req.getParameter(FormField.ENROLLMENT.key())));
+        sub.setInstitute(WebUtil.trim(req.getParameter(FormField.INSTITUTE.key())));
+        sub.setSpeciality(WebUtil.trim(req.getParameter(FormField.SPECIALITY.key())));
         sub.setDesignation(WebUtil.trim(req.getParameter(FormField.DESIGNATION.key())));
         sub.setIpAddress(WebUtil.clientIp(req));
 
@@ -107,20 +104,20 @@ public class PublicCertificateServlet extends HttpServlet {
         if (WebUtil.isBlank(sub.getFullName()) || sub.getFullName().length() > 120) {
             return "Enter your full name as it should appear on the certificate.";
         }
-        if (!EMAIL.matcher(sub.getEmail()).matches()) {
-            return "Enter a valid email address.";
+        if (!InputValidator.isValidEmail(sub.getEmail())) {
+            return "Enter a valid email address (for example name@institute.edu).";
         }
-        if (!PHONE.matcher(sub.getPhone()).matches()) {
-            return "Enter a valid mobile number.";
+        if (!InputValidator.isValidPhone(sub.getPhone())) {
+            return "Enter a valid 10-digit mobile number, or leave it blank.";
         }
-        if (WebUtil.isBlank(sub.getCollege())) {
-            return "Enter your college or organisation name.";
+        if (WebUtil.isBlank(sub.getInstitute()) || sub.getInstitute().length() > 255) {
+            return "Enter your institute name.";
         }
-        if (WebUtil.isBlank(sub.getEnrollmentNo())) {
-            return "Enter your enrollment or roll number.";
+        if (WebUtil.isBlank(sub.getSpeciality()) || sub.getSpeciality().length() > 120) {
+            return "Enter your speciality.";
         }
-        if (WebUtil.isBlank(sub.getDesignation())) {
-            return "Select your role.";
+        if (WebUtil.isBlank(sub.getDesignation()) || sub.getDesignation().length() > 80) {
+            return "Enter your designation.";
         }
         return null;
     }

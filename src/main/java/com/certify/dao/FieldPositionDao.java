@@ -9,13 +9,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FieldPositionDao {
 
     public List<FieldPosition> findBySeminar(long seminarId) {
         List<FieldPosition> list = new ArrayList<>();
-        String sql = "SELECT * FROM field_positions WHERE seminar_id = ?";
+        String sql = "SELECT * FROM field_positions WHERE seminar_id = ? ORDER BY y_percent";
         try (Connection c = Database.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
             ps.setLong(1, seminarId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -29,14 +31,38 @@ public class FieldPositionDao {
         return list;
     }
 
+    public Set<String> keysForSeminar(long seminarId) {
+        Set<String> keys = new HashSet<>();
+        for (FieldPosition p : findBySeminar(seminarId)) {
+            keys.add(p.getFieldKey());
+        }
+        return keys;
+    }
+
     public void ensureDefaults(long seminarId) {
         if (!findBySeminar(seminarId).isEmpty()) {
             return;
         }
-        double[] ys = {46.5, 54.0, 59.0, 64.0, 80.5, 84.5};
-        FormField[] fields = FormField.values();
-        for (int i = 0; i < fields.length; i++) {
-            upsert(FieldPosition.defaults(seminarId, fields[i], ys[i]));
+        upsert(FieldPosition.defaults(seminarId, FormField.FULL_NAME, 46.5));
+    }
+
+    public void addField(long seminarId, FormField field) {
+        if (keysForSeminar(seminarId).contains(field.key())) {
+            return;
+        }
+        int n = findBySeminar(seminarId).size();
+        double y = Math.min(85, 46.5 + n * 6);
+        upsert(FieldPosition.defaults(seminarId, field, y));
+    }
+
+    public void delete(long seminarId, String fieldKey) {
+        String sql = "DELETE FROM field_positions WHERE seminar_id = ? AND field_key = ?";
+        try (Connection c = Database.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, seminarId);
+            ps.setString(2, fieldKey);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

@@ -108,14 +108,35 @@ public final class Database {
                   share_link_id BIGINT,
                   full_name VARCHAR(200) NOT NULL,
                   email VARCHAR(200) NOT NULL,
-                  phone VARCHAR(40) NOT NULL,
-                  college VARCHAR(255) NOT NULL,
-                  enrollment_no VARCHAR(80) NOT NULL,
+                  phone VARCHAR(40),
+                  institute VARCHAR(255) NOT NULL,
+                  speciality VARCHAR(120) NOT NULL,
                   designation VARCHAR(80) NOT NULL,
                   created_at TIMESTAMP NOT NULL,
                   ip_address VARCHAR(80)
                 )
                 """);
+            migrateLegacy(st);
+        }
+    }
+
+    private static void migrateLegacy(Statement st) {
+        trySql(st, "ALTER TABLE submissions ALTER COLUMN phone SET NULL");
+        trySql(st, "ALTER TABLE submissions ADD COLUMN IF NOT EXISTS institute VARCHAR(255)");
+        trySql(st, "ALTER TABLE submissions ADD COLUMN IF NOT EXISTS speciality VARCHAR(120)");
+        trySql(st, "ALTER TABLE submissions ALTER COLUMN college DROP NOT NULL");
+        trySql(st, "ALTER TABLE submissions ALTER COLUMN enrollment_no DROP NOT NULL");
+        trySql(st, "UPDATE submissions SET institute = college WHERE (institute IS NULL OR institute = '') AND college IS NOT NULL");
+        trySql(st, "UPDATE submissions SET speciality = enrollment_no WHERE (speciality IS NULL OR speciality = '') AND enrollment_no IS NOT NULL");
+        trySql(st, "UPDATE field_positions SET field_key = 'institute' WHERE field_key = 'college'");
+        trySql(st, "UPDATE field_positions SET field_key = 'speciality' WHERE field_key IN ('enrollmentNo', 'enrollment_no')");
+    }
+
+    private static void trySql(Statement st, String sql) {
+        try {
+            st.execute(sql);
+        } catch (SQLException ignored) {
+            // Column already matches the new schema.
         }
     }
 
@@ -185,19 +206,17 @@ public final class Database {
         Files.createDirectories(template.getParent());
         SampleCertificateFactory.writeDemoTemplate(template);
 
-        double[] ys = {46.5, 54.0, 59.0, 64.0, 80.5, 84.5};
-        FormField[] fields = FormField.values();
+        FormField[] printed = {
+                FormField.FULL_NAME, FormField.INSTITUTE, FormField.SPECIALITY, FormField.DESIGNATION
+        };
+        double[] ys = {46.5, 54.0, 59.5, 65.0};
         try (PreparedStatement ps = c.prepareStatement("""
                 INSERT INTO field_positions (seminar_id, field_key, x_percent, y_percent, width_percent,
                   font_size, font_color, font_bold, text_align)
                 VALUES (?,?,?,?,?,?,?,?,?)
                 """)) {
-            for (int i = 0; i < fields.length; i++) {
-                FieldPosition p = FieldPosition.defaults(seminarId, fields[i], ys[i]);
-                if (fields[i] == FormField.EMAIL || fields[i] == FormField.PHONE) {
-                    p.setFontSize(16);
-                    p.setFontBold(false);
-                }
+            for (int i = 0; i < printed.length; i++) {
+                FieldPosition p = FieldPosition.defaults(seminarId, printed[i], ys[i]);
                 ps.setLong(1, seminarId);
                 ps.setString(2, p.getFieldKey());
                 ps.setDouble(3, p.getXPercent());

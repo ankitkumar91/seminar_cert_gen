@@ -11,8 +11,8 @@ public class Submission {
     private String fullName;
     private String email;
     private String phone;
-    private String college;
-    private String enrollmentNo;
+    private String institute;
+    private String speciality;
     private String designation;
     private Instant createdAt;
     private String ipAddress;
@@ -22,8 +22,8 @@ public class Submission {
         m.put(FormField.FULL_NAME.key(), fullName);
         m.put(FormField.EMAIL.key(), email);
         m.put(FormField.PHONE.key(), phone);
-        m.put(FormField.COLLEGE.key(), college);
-        m.put(FormField.ENROLLMENT.key(), enrollmentNo);
+        m.put(FormField.INSTITUTE.key(), institute);
+        m.put(FormField.SPECIALITY.key(), speciality);
         m.put(FormField.DESIGNATION.key(), designation);
         return m;
     }
@@ -40,10 +40,10 @@ public class Submission {
     public void setEmail(String email) { this.email = email; }
     public String getPhone() { return phone; }
     public void setPhone(String phone) { this.phone = phone; }
-    public String getCollege() { return college; }
-    public void setCollege(String college) { this.college = college; }
-    public String getEnrollmentNo() { return enrollmentNo; }
-    public void setEnrollmentNo(String enrollmentNo) { this.enrollmentNo = enrollmentNo; }
+    public String getInstitute() { return institute; }
+    public void setInstitute(String institute) { this.institute = institute; }
+    public String getSpeciality() { return speciality; }
+    public void setSpeciality(String speciality) { this.speciality = speciality; }
     public String getDesignation() { return designation; }
     public void setDesignation(String designation) { this.designation = designation; }
     public Instant getCreatedAt() { return createdAt; }

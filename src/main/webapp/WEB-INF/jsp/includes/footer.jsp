@@ -9,5 +9,8 @@
 <c:if test="${loadAlign}">
   <script src="${pageContext.request.contextPath}/assets/js/align.js"></script>
 </c:if>
+<c:if test="${loadFormValidate}">
+  <script src="${pageContext.request.contextPath}/assets/js/form-validate.js"></script>
+</c:if>
 </body>
 </html>

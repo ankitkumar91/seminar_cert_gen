@@ -6,7 +6,29 @@
 
 <p class="brand-mark mb-1">Developer · alignment</p>
 <h1 class="h4 mb-2">${seminar.title}</h1>
-<p class="text-secondary sans">Drag each box onto the artwork. Resize from the right edge. Font size is in pixels at the native ${certWidth}×${certHeight} resolution.</p>
+<p class="text-secondary sans">
+  Attendees always fill the same form (full name, email, mobile, institute, speciality, designation).
+  Add only the fields that should be drawn on this seminar’s artwork. Remove a field to stop printing it.
+</p>
+
+<form method="post" class="sans mb-4">
+  <input type="hidden" name="csrf" value="${sessionScope.csrfToken}">
+  <input type="hidden" name="id" value="${seminar.id}">
+  <div class="card-quiet p-3 d-flex flex-wrap align-items-end gap-2">
+    <div class="flex-grow-1">
+      <label class="form-label small mb-1" for="addField">Add a field to the certificate</label>
+      <select class="form-select" id="addField" name="addField" ${empty availableFields ? 'disabled' : ''}>
+        <c:if test="${empty availableFields}">
+          <option>All form fields are already on this certificate</option>
+        </c:if>
+        <c:forEach var="f" items="${availableFields}">
+          <option value="${f.key}">${f.label}<c:if test="${!f.required}"> (optional on form)</c:if></option>
+        </c:forEach>
+      </select>
+    </div>
+    <button class="btn btn-navy" type="submit" name="action" value="add" ${empty availableFields ? 'disabled' : ''}>Add to certificate</button>
+  </div>
+</form>
 
 <form method="post" class="sans">
   <input type="hidden" name="csrf" value="${sessionScope.csrfToken}">
@@ -26,6 +48,10 @@
     </c:forEach>
   </div>
 
+  <c:if test="${empty positions}">
+    <p class="text-secondary">No fields are printed yet. Add at least full name from the list above.</p>
+  </c:if>
+
   <div class="row g-3 align-controls">
     <c:forEach var="p" items="${positions}">
       <c:set var="label" value="${p.fieldKey}"/>
@@ -34,7 +60,10 @@
       </c:forEach>
       <div class="col-md-6" data-field="${p.fieldKey}">
         <div class="card-quiet p-3 h-100">
-          <strong>${label}</strong>
+          <div class="d-flex justify-content-between align-items-start gap-2">
+            <strong>${label}</strong>
+            <button class="btn btn-sm btn-outline-danger" type="submit" name="action" value="remove:${p.fieldKey}">Remove</button>
+          </div>
           <div class="row g-2 mt-1">
             <div class="col-4">
               <label class="form-label small mb-0">X %</label>

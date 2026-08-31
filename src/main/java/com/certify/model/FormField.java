@@ -1,16 +1,16 @@
 package com.certify.model;
 
 /**
- * Fixed form fields identical for every seminar (scope 2.5 / section 5).
- * Pending client confirmation — this is the working set used in the first slice.
+ * Fixed attendee form fields, identical for every seminar.
+ * The developer chooses a subset of these to print on the certificate.
  */
 public enum FormField {
     FULL_NAME("fullName", "Full name", true),
-    EMAIL("email", "Email address", true),
-    PHONE("phone", "Mobile number", true),
-    COLLEGE("college", "College / organisation", true),
-    ENROLLMENT("enrollmentNo", "Enrollment / roll number", true),
-    DESIGNATION("designation", "Role", true);
+    EMAIL("email", "Email", true),
+    PHONE("phone", "Mobile number", false),
+    INSTITUTE("institute", "Institute", true),
+    SPECIALITY("speciality", "Speciality", true),
+    DESIGNATION("designation", "Designation", true);
 
     private final String key;
     private final String label;
@@ -47,6 +47,15 @@ public enum FormField {
     }
 
     public static FormField fromKey(String key) {
+        if (key == null) {
+            return null;
+        }
+        if ("college".equals(key)) {
+            return INSTITUTE;
+        }
+        if ("enrollmentNo".equals(key) || "enrollment_no".equals(key)) {
+            return SPECIALITY;
+        }
         for (FormField f : values()) {
             if (f.key.equals(key)) {
                 return f;

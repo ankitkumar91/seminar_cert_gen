@@ -42,12 +42,14 @@ Re-uploading a design returns the seminar to pending approval.
 
 These fields are identical for every seminar:
 
-- Full name
-- Email
-- Mobile number
-- College / organisation
-- Enrollment / roll number
-- Role (Student / Faculty / Research scholar / Participant)
+- Full name (required)
+- Email (required, format-checked)
+- Mobile number (optional, 10-digit format-checked when entered)
+- Institute (required)
+- Speciality (required)
+- Designation (required)
+
+The developer chooses which of these values are drawn on each seminar’s certificate (add/remove on the alignment screen). The attendee form does not change.
 
 ### Certificate image standard
 

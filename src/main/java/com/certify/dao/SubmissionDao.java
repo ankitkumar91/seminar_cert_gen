@@ -16,8 +16,8 @@ public class SubmissionDao {
 
     public long insert(Submission s) {
         String sql = """
-                INSERT INTO submissions (seminar_id, share_link_id, full_name, email, phone, college,
-                  enrollment_no, designation, created_at, ip_address)
+                INSERT INTO submissions (seminar_id, share_link_id, full_name, email, phone, institute,
+                  speciality, designation, created_at, ip_address)
                 VALUES (?,?,?,?,?,?,?,?,?,?)
                 """;
         try (Connection c = Database.getConnection();
@@ -30,9 +30,9 @@ public class SubmissionDao {
             }
             ps.setString(3, s.getFullName());
             ps.setString(4, s.getEmail());
-            ps.setString(5, s.getPhone());
-            ps.setString(6, s.getCollege());
-            ps.setString(7, s.getEnrollmentNo());
+            ps.setString(5, blankToNull(s.getPhone()));
+            ps.setString(6, s.getInstitute());
+            ps.setString(7, s.getSpeciality());
             ps.setString(8, s.getDesignation());
             ps.setObject(9, Instant.now());
             ps.setString(10, s.getIpAddress());
@@ -71,7 +71,7 @@ public class SubmissionDao {
                     s.setId(rs.getLong("id"));
                     s.setFullName(rs.getString("full_name"));
                     s.setEmail(rs.getString("email"));
-                    s.setCollege(rs.getString("college"));
+                    s.setInstitute(rs.getString("institute"));
                     s.setCreatedAt(rs.getObject("created_at", Instant.class));
                     list.add(s);
                 }
@@ -80,5 +80,9 @@ public class SubmissionDao {
             throw new RuntimeException(e);
         }
         return list;
+    }
+
+    private static String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value;
     }
 }
