@@ -19,7 +19,7 @@
       <c:forEach var="f" items="${fields}">
         <c:if test="${f.key == p.fieldKey}"><c:set var="label" value="${f.label}"/></c:if>
       </c:forEach>
-      <div class="field-box" data-key="${p.fieldKey}" data-x="${p.xPercent}" data-y="${p.yPercent}" data-w="${p.widthPercent}">
+      <div class="field-box" data-key="${p.fieldKey}" data-x="${p.XPercent}" data-y="${p.YPercent}" data-w="${p.widthPercent}">
         ${label}
         <span class="handle"></span>
       </div>
@@ -38,11 +38,11 @@
           <div class="row g-2 mt-1">
             <div class="col-4">
               <label class="form-label small mb-0">X %</label>
-              <input class="form-control form-control-sm" name="${p.fieldKey}_x" value="${p.xPercent}">
+              <input class="form-control form-control-sm" name="${p.fieldKey}_x" value="${p.XPercent}">
             </div>
             <div class="col-4">
               <label class="form-label small mb-0">Y %</label>
-              <input class="form-control form-control-sm" name="${p.fieldKey}_y" value="${p.yPercent}">
+              <input class="form-control form-control-sm" name="${p.fieldKey}_y" value="${p.YPercent}">
             </div>
             <div class="col-4">
               <label class="form-label small mb-0">Width %</label>
