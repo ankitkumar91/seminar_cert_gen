@@ -1,0 +1,191 @@
+:root {
+  --navy: #0f2744;
+  --navy-2: #17365d;
+  --gold: #c4a35a;
+  --gold-soft: #e7d7a8;
+  --paper: #f6f1e7;
+  --ink: #2a241d;
+  --muted: #6b6258;
+  --line: #e4d9c8;
+  --white: #fffcf7;
+  --danger: #9b2c2c;
+  --ok: #276749;
+}
+
+html, body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+}
+
+body.app-body {
+  min-height: 100vh;
+}
+
+.sans, .btn, .form-control, .form-select, .nav, .badge, table, input, label, textarea {
+  font-family: "Source Sans 3", "Segoe UI", sans-serif;
+}
+
+.site-header {
+  background: var(--navy);
+  color: var(--white);
+  border-bottom: 4px solid var(--gold);
+}
+
+.brand-mark {
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--gold-soft);
+}
+
+.brand-title {
+  font-weight: 650;
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.nav-link, .navbar-brand, .site-header a {
+  color: var(--white) !important;
+}
+
+.nav-link.active, .nav-link:hover {
+  color: var(--gold-soft) !important;
+}
+
+.page-wrap {
+  max-width: 1120px;
+}
+
+.hero {
+  background:
+    linear-gradient(120deg, rgba(15, 39, 68, 0.92), rgba(15, 39, 68, 0.72)),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath fill='none' stroke='%23c4a35a' stroke-opacity='0.18' d='M0 80L80 0'/%3E%3C/svg%3E");
+  color: var(--white);
+  border-radius: 18px;
+  padding: 3rem 2.4rem;
+  margin-top: 1.5rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 4vw, 3.1rem);
+  line-height: 1.15;
+}
+
+.card-quiet {
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 39, 68, 0.05);
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--navy);
+  border: none;
+  font-weight: 650;
+}
+
+.btn-gold:hover {
+  background: #b39248;
+  color: var(--navy);
+}
+
+.btn-navy {
+  background: var(--navy);
+  color: var(--white);
+  border: none;
+}
+
+.btn-navy:hover {
+  background: var(--navy-2);
+  color: var(--white);
+}
+
+.status-pill {
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+}
+
+.status-DRAFT { background: #edf2f7; color: #2d3748; }
+.status-PENDING_APPROVAL { background: #fef3c7; color: #92400e; }
+.status-APPROVED { background: #dcfce7; color: #166534; }
+
+.table thead th {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border-bottom-color: var(--line);
+}
+
+.align-stage {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  user-select: none;
+}
+
+.align-stage img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+}
+
+.field-box {
+  position: absolute;
+  border: 1px dashed var(--gold);
+  background: rgba(255, 252, 247, 0.18);
+  cursor: grab;
+  min-height: 28px;
+  padding: 2px 6px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.field-box.active {
+  border-style: solid;
+  box-shadow: 0 0 0 2px rgba(196, 163, 90, 0.45);
+}
+
+.field-box .handle {
+  position: absolute;
+  right: -5px;
+  top: 0;
+  bottom: 0;
+  width: 10px;
+  cursor: ew-resize;
+}
+
+.cert-form .form-control, .cert-form .form-select {
+  border-radius: 10px;
+  border-color: var(--line);
+  padding: 0.7rem 0.85rem;
+}
+
+.expired-panel {
+  text-align: center;
+  padding: 4rem 1.5rem;
+}
+
+.footer-note {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.link-box {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.86rem;
+  background: #f3eee4;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  word-break: break-all;
+}
+
+@media (max-width: 767px) {
+  .hero { padding: 2rem 1.2rem; }
+}

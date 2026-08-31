@@ -1,0 +1,11 @@
+target/
+tools/tomcat/
+data/
+*.log
+.idea/
+*.iml
+.DS_Store
+.classpath
+.project
+.settings/
+logs/
