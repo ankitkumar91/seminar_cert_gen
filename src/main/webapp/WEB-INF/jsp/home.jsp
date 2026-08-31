@@ -6,7 +6,7 @@
 <section class="hero">
   <p class="brand-mark mb-3">For seminar organisers</p>
   <h1>Issue personalised participation certificates without redesigning the layout each time.</h1>
-  <p class="mt-3 mb-0" style="max-width: 38rem; color:#f6f1e7">
+  <p class="mt-3 mb-0" style="max-width: 38rem; color:#f3f3f3">
     Admin staff create a seminar, upload the finished certificate artwork, and wait for the developer to lock field positions.
     Once approved, a time-bound link can be copied into a WhatsApp group. Attendees fill one fixed form and download a PDF.
   </p>

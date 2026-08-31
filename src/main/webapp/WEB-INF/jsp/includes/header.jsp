@@ -15,9 +15,13 @@
 <body class="app-body">
 <header class="site-header">
   <div class="container page-wrap py-3 d-flex justify-content-between align-items-center gap-3">
-    <a href="${pageContext.request.contextPath}/" class="text-decoration-none">
-      <div class="brand-mark">Campus events</div>
-      <p class="brand-title mb-0">Certificate Desk</p>
+    <a href="${pageContext.request.contextPath}/" class="text-decoration-none brand-lockup">
+      <img class="brand-logo" src="${pageContext.request.contextPath}/assets/img/elsevier-logo.png"
+           width="125" height="130" alt="Elsevier">
+      <span>
+        <div class="brand-mark">Elsevier</div>
+        <p class="brand-title mb-0">Certificate Desk</p>
+      </span>
     </a>
     <nav class="d-flex align-items-center gap-3 sans">
       <c:choose>
@@ -28,7 +32,7 @@
           <c:if test="${sessionScope.authUser.role == 'DEVELOPER'}">
             <a class="nav-link px-0" href="${pageContext.request.contextPath}/developer">Alignment queue</a>
           </c:if>
-          <span class="small" style="color:#e7d7a8">${sessionScope.authUser.displayName}</span>
+          <span class="small user-chip">${sessionScope.authUser.displayName}</span>
           <form method="post" action="${pageContext.request.contextPath}/logout" class="m-0">
             <button class="btn btn-sm btn-outline-light">Sign out</button>
           </form>
