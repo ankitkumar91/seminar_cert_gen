@@ -22,6 +22,18 @@ public enum FormField {
         this.required = required;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean isRequired() {
+        return required;
+    }
+
     public String key() {
         return key;
     }
