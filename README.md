@@ -108,18 +108,36 @@ Noto Sans fonts under `WEB-INF/fonts` are licensed as SIL Open Font License (Goo
 
 ## Run in Eclipse (Tomcat 10)
 
-This repo is a **Maven Dynamic Web Project** (`seminar-certificates`) with WTP facets for Jakarta Servlet 5 / Tomcat 10. Import the clone itself — do not copy the sources into a second folder.
+This repo is a **Maven Dynamic Web Project** named `seminar-certificates`. Your Eclipse workspace is:
 
-### 1. Import into your Eclipse workspace
+`C:\Users\Ankit\eclipse-workspace`
 
-Use **Eclipse IDE for Enterprise Java and Web Developers** (or any package with M2E + WTP). JDK 17+ must be installed and registered under **Window → Preferences → Java → Installed JREs**.
+This cloud environment cannot write to that Windows folder. On your PC, either import the clone or run the helper script so the project appears inside that workspace.
+
+### 0. Put the project in `C:\Users\Ankit\eclipse-workspace` (Windows)
+
+1. Clone or copy this repository to any folder on your PC (for example `C:\Users\Ankit\git\seminar-certificates`).
+2. Double-click `scripts\add-to-eclipse-workspace.bat`  
+   or from Command Prompt:
+
+```bat
+scripts\add-to-eclipse-workspace.bat C:\Users\Ankit\eclipse-workspace
+```
+
+That creates `C:\Users\Ankit\eclipse-workspace\seminar-certificates` (a junction to the clone when possible, otherwise a copy).
+
+3. In Eclipse: **File → Switch Workspace → Other…** → `C:\Users\Ankit\eclipse-workspace` → Launch.
+
+### 1. Import into that workspace
+
+Use **Eclipse IDE for Enterprise Java and Web Developers** (M2E + WTP). Register JDK 17+ under **Window → Preferences → Java → Installed JREs**.
 
 1. **File → Import… → Maven → Existing Maven Projects**.
-2. **Root Directory**: the folder that contains this `pom.xml`.
-3. Leave **Add project(s) to working set** optional. Do **not** tick “Copy projects into workspace”.
-4. Finish. Eclipse should show project `seminar-certificates` with a `M` Maven decorator and a globe (web) decorator.
+2. **Root Directory**: `C:\Users\Ankit\eclipse-workspace\seminar-certificates`  
+   (or the folder that contains `pom.xml` if you skip the script).
+3. Finish. You should see project `seminar-certificates`.
 
-If Maven import is unavailable: **File → Open Projects from File System…**, select the same folder, then right-click the project → **Configure → Convert to Maven Project**.
+If Maven import is missing: **File → Open Projects from File System…**, then right-click the project → **Configure → Convert to Maven Project**.
 
 ### 2. Add Apache Tomcat 10.1 as a server
 
@@ -140,7 +158,7 @@ Demo accounts: `admin` / `Admin@123` and `developer` / `Dev@123`. Attendee demo:
 Data files are written under Tomcat’s `certify-data` directory (or `catalina.base/certify-data`). To pin them, add a VM argument on the Tomcat server (**Open launch configuration → Arguments → VM arguments**):
 
 ```
--Dcertify.data.dir=${workspace_loc:/seminar-certificates}/data
+-Dcertify.data.dir=C:\Users\Ankit\eclipse-workspace\seminar-certificates\data
 ```
 
 To deploy at the server root instead of `/seminar-certificates`, double-click the Tomcat server → **Modules** → edit the path to `/`.
