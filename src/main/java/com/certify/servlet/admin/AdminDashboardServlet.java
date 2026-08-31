@@ -6,7 +6,6 @@ import com.certify.dao.SubmissionDao;
 import com.certify.model.Seminar;
 import com.certify.model.SeminarStatus;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@WebServlet("/admin")
 public class AdminDashboardServlet extends HttpServlet {
     private final SeminarDao seminars = new SeminarDao();
     private final SubmissionDao submissions = new SubmissionDao();

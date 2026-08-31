@@ -9,7 +9,6 @@ import com.certify.util.ImageValidator;
 import com.certify.util.WebUtil;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +23,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-@WebServlet("/admin/seminars")
 @MultipartConfig(maxFileSize = AppConfig.MAX_UPLOAD_BYTES, fileSizeThreshold = 1024 * 1024)
 public class SeminarDetailServlet extends HttpServlet {
     private final SeminarDao seminars = new SeminarDao();

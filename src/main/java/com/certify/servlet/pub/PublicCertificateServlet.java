@@ -13,7 +13,6 @@ import com.certify.util.InputValidator;
 import com.certify.util.PdfGenerator;
 import com.certify.util.WebUtil;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +20,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.file.Path;
 
-@WebServlet("/c/*")
 public class PublicCertificateServlet extends HttpServlet {
     private final ShareLinkDao links = new ShareLinkDao();
     private final SeminarDao seminars = new SeminarDao();

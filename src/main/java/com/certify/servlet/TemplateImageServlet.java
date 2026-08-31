@@ -5,7 +5,6 @@ import com.certify.dao.SeminarDao;
 import com.certify.model.Role;
 import com.certify.model.Seminar;
 import com.certify.model.User;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@WebServlet("/media/template")
 public class TemplateImageServlet extends HttpServlet {
     private final SeminarDao seminars = new SeminarDao();
 

@@ -9,7 +9,6 @@ import com.certify.model.Seminar;
 import com.certify.model.User;
 import com.certify.util.WebUtil;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-@WebServlet("/developer/align")
 public class AlignmentServlet extends HttpServlet {
     private final SeminarDao seminars = new SeminarDao();
     private final FieldPositionDao positions = new FieldPositionDao();

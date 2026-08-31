@@ -7,7 +7,6 @@ import com.certify.model.SeminarStatus;
 import com.certify.model.User;
 import com.certify.util.WebUtil;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 
-@WebServlet({"/admin/seminars/new", "/admin/seminars/edit"})
 public class SeminarFormServlet extends HttpServlet {
     private final SeminarDao seminars = new SeminarDao();
 
