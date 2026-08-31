@@ -105,3 +105,44 @@ scripts/run-local.sh         Build WAR and start Tomcat
 ```
 
 Noto Sans fonts under `WEB-INF/fonts` are licensed as SIL Open Font License (Google Noto).
+
+## Run in Eclipse (Tomcat 10)
+
+This repo is a **Maven Dynamic Web Project** (`seminar-certificates`) with WTP facets for Jakarta Servlet 5 / Tomcat 10. Import the clone itself — do not copy the sources into a second folder.
+
+### 1. Import into your Eclipse workspace
+
+Use **Eclipse IDE for Enterprise Java and Web Developers** (or any package with M2E + WTP). JDK 17+ must be installed and registered under **Window → Preferences → Java → Installed JREs**.
+
+1. **File → Import… → Maven → Existing Maven Projects**.
+2. **Root Directory**: the folder that contains this `pom.xml`.
+3. Leave **Add project(s) to working set** optional. Do **not** tick “Copy projects into workspace”.
+4. Finish. Eclipse should show project `seminar-certificates` with a `M` Maven decorator and a globe (web) decorator.
+
+If Maven import is unavailable: **File → Open Projects from File System…**, select the same folder, then right-click the project → **Configure → Convert to Maven Project**.
+
+### 2. Add Apache Tomcat 10.1 as a server
+
+1. **Window → Show View → Servers**.
+2. In the Servers view: **No servers are available. Click this link to create a new server…** (or right-click → **New → Server**).
+3. **Apache → Tomcat v10.1 Server** → Next.
+4. **Tomcat installation directory**: your Tomcat 10.1 home (for example `C:\apache-tomcat-10.1.xx` or the `tools/tomcat` folder produced by `./scripts/run-local.sh`).
+5. Finish.
+
+### 3. Run the app on that server
+
+1. Right-click **seminar-certificates** → **Properties → Project Facets** and confirm **Dynamic Web Module 5.0** and **Java 17**.
+2. Right-click the project → **Run As → Run on Server** → choose **Tomcat v10.1** → Finish.
+3. Open `http://localhost:8080/seminar-certificates/` (Eclipse deploys with that context root, not `/`).
+
+Demo accounts: `admin` / `Admin@123` and `developer` / `Dev@123`. Attendee demo: `http://localhost:8080/seminar-certificates/c/demo-nwcj-2026`.
+
+Data files are written under Tomcat’s `certify-data` directory (or `catalina.base/certify-data`). To pin them, add a VM argument on the Tomcat server (**Open launch configuration → Arguments → VM arguments**):
+
+```
+-Dcertify.data.dir=${workspace_loc:/seminar-certificates}/data
+```
+
+To deploy at the server root instead of `/seminar-certificates`, double-click the Tomcat server → **Modules** → edit the path to `/`.
+
+A **Maven package** launch config lives in `eclipse/Maven package.launch` (clean + package, skip tests). Use it to build `target/ROOT.war` without starting Tomcat.
