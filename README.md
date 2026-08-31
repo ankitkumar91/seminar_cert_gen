@@ -112,7 +112,7 @@ This repo is a **Maven Dynamic Web Project** named `seminar-certificates`. Your 
 
 `C:\Users\Ankit\eclipse-workspace`
 
-This cloud environment cannot write to that Windows folder. On your PC, either import the clone or run the helper script so the project appears inside that workspace.
+On your Windows PC, run the helper script so the project appears inside that workspace, then import it in Eclipse.
 
 ### 0. Put the project in `C:\Users\Ankit\eclipse-workspace` (Windows)
 
