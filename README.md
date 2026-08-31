@@ -2,7 +2,7 @@
 
 Web platform for campus seminars: an admin uploads a finished certificate image, a developer places the standard attendee fields on that image, and a time-bound link lets students download a personalised PDF.
 
-This repository is a **Tomcat 10** WAR built with **Java 17+**, **Jakarta Servlet 6**, **JSP**, **JSTL**, **Bootstrap 5**, and **jQuery**.
+This repository is a **Tomcat 9** WAR built with **Java 17**, **Servlet 4.0 (`javax.servlet`)**, **JSP**, **JSTL 1.2**, **Bootstrap 5**, and **jQuery**.
 
 ## Architecture (planning)
 
@@ -23,7 +23,7 @@ Attendee (shared URL)          Admin                         Developer
 
 | Layer | Choice | Why |
 | --- | --- | --- |
-| App server | Apache Tomcat 10.1 | Jakarta Servlet/JSP, WAR deploy |
+| App server | Apache Tomcat 9 | Servlet 4.0 / JSP 2.3 WAR deploy |
 | UI | JSP + Bootstrap 5 + jQuery | Matches the requested stack |
 | Persistence | H2 file database | Zero extra services; swap JDBC URL for MySQL later |
 | Files | Disk under `CERTIFY_DATA_DIR` | Certificate PNGs stay off the classpath |
@@ -67,7 +67,7 @@ Each link is a random token (`/c/{token}`). After `expires_at`, the form is repl
 
 ## Run locally with Tomcat
 
-Requirements: JDK 17+, Maven 3.8+, Tomcat 10.1 (the helper script downloads Tomcat if needed).
+Requirements: JDK 17, Maven 3.8+, Tomcat 9 (the helper script downloads Tomcat 9 if needed). Do not deploy this WAR on Tomcat 10 — that server expects `jakarta.servlet`.
 
 ```bash
 chmod +x scripts/run-local.sh
@@ -106,7 +106,7 @@ scripts/run-local.sh         Build WAR and start Tomcat
 
 Noto Sans fonts under `WEB-INF/fonts` are licensed as SIL Open Font License (Google Noto).
 
-## Run in Eclipse (Tomcat 10)
+## Run in Eclipse (Tomcat 9)
 
 This repo is a **Maven Dynamic Web Project** named `seminar-certificates`. Your Eclipse workspace is:
 
@@ -139,18 +139,18 @@ Use **Eclipse IDE for Enterprise Java and Web Developers** (M2E + WTP). Register
 
 If Maven import is missing: **File → Open Projects from File System…**, then right-click the project → **Configure → Convert to Maven Project**.
 
-### 2. Add Apache Tomcat 10.1 as a server
+### 2. Add Apache Tomcat 9 as a server
 
 1. **Window → Show View → Servers**.
 2. In the Servers view: **No servers are available. Click this link to create a new server…** (or right-click → **New → Server**).
-3. **Apache → Tomcat v10.1 Server** → Next.
-4. **Tomcat installation directory**: your Tomcat 10.1 home (for example `C:\apache-tomcat-10.1.xx` or the `tools/tomcat` folder produced by `./scripts/run-local.sh`).
+3. **Apache → Tomcat v9.0 Server** → Next.
+4. **Tomcat installation directory**: your Tomcat 9 home (for example `C:\apache-tomcat-9.0.xx`).
 5. Finish.
 
 ### 3. Run the app on that server
 
-1. Right-click **seminar-certificates** → **Properties → Project Facets** and confirm **Dynamic Web Module 5.0** and **Java 17**.
-2. Right-click the project → **Run As → Run on Server** → choose **Tomcat v10.1** → Finish.
+1. Right-click **seminar-certificates** → **Properties → Project Facets** and confirm **Dynamic Web Module 4.0** and **Java 17**.
+2. Right-click the project → **Run As → Run on Server** → choose **Tomcat v9.0** → Finish.
 3. Open `http://localhost:8080/seminar-certificates/` (Eclipse deploys with that context root, not `/`).
 
 Demo accounts: `admin` / `Admin@123` and `developer` / `Dev@123`. Attendee demo: `http://localhost:8080/seminar-certificates/c/demo-nwcj-2026`.

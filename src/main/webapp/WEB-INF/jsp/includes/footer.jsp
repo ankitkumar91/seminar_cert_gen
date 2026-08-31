@@ -1,4 +1,4 @@
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 </main>
 <footer class="container page-wrap pb-5 footer-note sans">
   Certificate Desk overlays attendee details onto the design supplied for each seminar and issues a PDF. Links expire at the time the admin sets.

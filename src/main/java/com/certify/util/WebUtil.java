@@ -1,9 +1,9 @@
 package com.certify.util;
 
 import com.certify.config.AppConfig;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jakarta.servlet.http.Part;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import java.io.IOException;
 import java.util.UUID;

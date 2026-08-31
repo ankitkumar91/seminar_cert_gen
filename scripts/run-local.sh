@@ -6,13 +6,13 @@ TOMCAT_HOME="${TOMCAT_HOME:-$ROOT/tools/tomcat}"
 DATA_DIR="${CERTIFY_DATA_DIR:-$ROOT/data}"
 export JAVA_HOME="${JAVA_HOME:-/usr/lib/jvm/java-21-openjdk-amd64}"
 
-if [[ ! -x "$TOMCAT_HOME/bin/catalina.sh" ]]; then
+if [[ ! -x "$TOMCAT_HOME/bin/catalina.sh" ]] || ! grep -q "Apache Tomcat Version 9" "$TOMCAT_HOME/RELEASE-NOTES" 2>/dev/null; then
   mkdir -p "$ROOT/tools"
-  echo "Downloading Apache Tomcat 10.1.59…"
-  curl -fsSL -o /tmp/tomcat.tgz "https://downloads.apache.org/tomcat/tomcat-10/v10.1.59/bin/apache-tomcat-10.1.59.tar.gz"
+  echo "Downloading Apache Tomcat 9.0.121…"
+  curl -fsSL -o /tmp/tomcat.tgz "https://downloads.apache.org/tomcat/tomcat-9/v9.0.121/bin/apache-tomcat-9.0.121.tar.gz"
   tar -xzf /tmp/tomcat.tgz -C "$ROOT/tools"
   rm -rf "$TOMCAT_HOME"
-  mv "$ROOT/tools/apache-tomcat-10.1.59" "$TOMCAT_HOME"
+  mv "$ROOT/tools/apache-tomcat-9.0.121" "$TOMCAT_HOME"
   rm -rf "$TOMCAT_HOME/webapps/docs" "$TOMCAT_HOME/webapps/examples" "$TOMCAT_HOME/webapps/host-manager"
 fi
 
