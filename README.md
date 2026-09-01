@@ -61,6 +61,10 @@ The design team supplies one complete flat image (college name, logo, borders). 
 
 Each link is a random token (`/c/{token}`). After `expires_at`, the form is replaced by a static expired message. Sharing is copy-paste (WhatsApp, email); there is no bulk send.
 
+### Admin and developer lists
+
+Seminar dashboards load **25 rows per page**, with search on title or organiser and a status filter. Link and download totals come from two counted subqueries on the current page, not one query per row. The developer queue lists **pending approval first**. Indexes on `seminars(created_at)`, `seminars(status)`, `share_links(seminar_id)`, and `submissions(seminar_id)` are created on startup.
+
 ### Out of scope (honoured)
 
 - Per-seminar custom form builders

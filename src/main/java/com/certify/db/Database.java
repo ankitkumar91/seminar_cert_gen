@@ -117,6 +117,11 @@ public final class Database {
                 )
                 """);
             migrateLegacy(st);
+            st.execute("CREATE INDEX IF NOT EXISTS idx_seminars_created_at ON seminars(created_at)");
+            st.execute("CREATE INDEX IF NOT EXISTS idx_seminars_updated_at ON seminars(updated_at)");
+            st.execute("CREATE INDEX IF NOT EXISTS idx_seminars_status ON seminars(status)");
+            st.execute("CREATE INDEX IF NOT EXISTS idx_share_links_seminar ON share_links(seminar_id)");
+            st.execute("CREATE INDEX IF NOT EXISTS idx_submissions_seminar ON submissions(seminar_id)");
         }
     }
 

@@ -3,6 +3,7 @@ package com.certify.dao;
 import com.certify.db.Database;
 import com.certify.model.Seminar;
 import com.certify.model.SeminarStatus;
+import com.certify.util.Paging;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +17,12 @@ import java.util.List;
 
 public class SeminarDao {
 
+    private static final String LIST_COLUMNS = """
+            s.id, s.title, s.venue, s.seminar_date, s.organizer, s.status,
+            s.template_relpath, s.template_width, s.template_height,
+            s.created_by, s.created_at, s.updated_at, s.approved_by, s.approved_at
+            """;
+
     public List<Seminar> findAll() {
         return query("SELECT * FROM seminars ORDER BY created_at DESC");
     }
@@ -28,9 +35,77 @@ public class SeminarDao {
         return query("SELECT * FROM seminars WHERE template_relpath IS NOT NULL ORDER BY status ASC, updated_at DESC");
     }
 
+    public int countAll() {
+        return scalar("SELECT COUNT(*) FROM seminars");
+    }
+
+    public int countByStatus(SeminarStatus status) {
+        try (Connection c = Database.getConnection();
+             PreparedStatement ps = c.prepareStatement("SELECT COUNT(*) FROM seminars WHERE status = ?")) {
+            ps.setString(1, status.name());
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int countAdmin(SeminarListQuery filter) {
+        StringBuilder sql = new StringBuilder("SELECT COUNT(*) FROM seminars s WHERE 1=1");
+        appendFilters(sql, filter);
+        return scalarFiltered(sql.toString(), filter);
+    }
+
+    public List<Seminar> findAdminPage(SeminarListQuery filter, int page) {
+        StringBuilder sql = new StringBuilder("""
+                SELECT %s,
+                  (SELECT COUNT(*) FROM share_links sl WHERE sl.seminar_id = s.id) AS link_count,
+                  (SELECT COUNT(*) FROM submissions sub WHERE sub.seminar_id = s.id) AS download_count
+                FROM seminars s
+                WHERE 1=1
+                """.formatted(LIST_COLUMNS));
+        appendFilters(sql, filter);
+        sql.append(" ORDER BY s.created_at DESC OFFSET ? ROWS FETCH FIRST ? ROWS ONLY");
+        return listFiltered(sql.toString(), filter, page, true);
+    }
+
+    public int countDeveloper(SeminarListQuery filter) {
+        StringBuilder sql = new StringBuilder(
+                "SELECT COUNT(*) FROM seminars s WHERE s.template_relpath IS NOT NULL");
+        appendFilters(sql, filter);
+        return scalarFiltered(sql.toString(), filter);
+    }
+
+    public List<Seminar> findDeveloperPage(SeminarListQuery filter, int page) {
+        StringBuilder sql = new StringBuilder("""
+                SELECT %s
+                FROM seminars s
+                WHERE s.template_relpath IS NOT NULL
+                """.formatted(LIST_COLUMNS));
+        appendFilters(sql, filter);
+        sql.append("""
+                 ORDER BY CASE s.status
+                   WHEN 'PENDING_APPROVAL' THEN 0
+                   WHEN 'DRAFT' THEN 1
+                   ELSE 2
+                 END, s.updated_at DESC
+                 OFFSET ? ROWS FETCH FIRST ? ROWS ONLY
+                """);
+        return listFiltered(sql.toString(), filter, page, false);
+    }
+
     public Seminar find(long id) {
-        List<Seminar> list = query("SELECT * FROM seminars WHERE id = " + id);
-        return list.isEmpty() ? null : list.get(0);
+        String sql = "SELECT * FROM seminars WHERE id = ?";
+        try (Connection c = Database.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? map(rs, false) : null;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public long insert(Seminar s) {
@@ -103,6 +178,70 @@ public class SeminarDao {
         }
     }
 
+    private static void appendFilters(StringBuilder sql, SeminarListQuery filter) {
+        if (filter.hasText()) {
+            sql.append(" AND (LOWER(s.title) LIKE ? ESCAPE '\\' OR LOWER(s.organizer) LIKE ? ESCAPE '\\')");
+        }
+        if (filter.getStatus() != null) {
+            sql.append(" AND s.status = ?");
+        }
+    }
+
+    private int bindFilters(PreparedStatement ps, SeminarListQuery filter, int start)
+            throws SQLException {
+        int i = start;
+        if (filter.hasText()) {
+            String like = filter.likePattern();
+            ps.setString(i++, like);
+            ps.setString(i++, like);
+        }
+        if (filter.getStatus() != null) {
+            ps.setString(i++, filter.getStatus().name());
+        }
+        return i;
+    }
+
+    private int scalarFiltered(String sql, SeminarListQuery filter) {
+        try (Connection c = Database.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            bindFilters(ps, filter, 1);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next();
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private List<Seminar> listFiltered(String sql, SeminarListQuery filter, int page,
+                                       boolean withCounts) {
+        List<Seminar> list = new ArrayList<>();
+        try (Connection c = Database.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            int i = bindFilters(ps, filter, 1);
+            ps.setInt(i++, Paging.offset(page));
+            ps.setInt(i, Paging.PAGE_SIZE);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    list.add(map(rs, withCounts));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return list;
+    }
+
+    private int scalar(String sql) {
+        try (Connection c = Database.getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            rs.next();
+            return rs.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void bindCore(PreparedStatement ps, Seminar s) throws SQLException {
         ps.setString(1, s.getTitle());
         ps.setString(2, s.getDescription());
@@ -117,7 +256,7 @@ public class SeminarDao {
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
             while (rs.next()) {
-                list.add(map(rs));
+                list.add(map(rs, false));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -125,11 +264,15 @@ public class SeminarDao {
         return list;
     }
 
-    private Seminar map(ResultSet rs) throws SQLException {
+    private Seminar map(ResultSet rs, boolean withCounts) throws SQLException {
         Seminar s = new Seminar();
         s.setId(rs.getLong("id"));
         s.setTitle(rs.getString("title"));
-        s.setDescription(rs.getString("description"));
+        try {
+            s.setDescription(rs.getString("description"));
+        } catch (SQLException ignored) {
+            // List queries omit the CLOB.
+        }
         s.setVenue(rs.getString("venue"));
         s.setSeminarDate(rs.getObject("seminar_date", LocalDate.class));
         s.setOrganizer(rs.getString("organizer"));
@@ -145,6 +288,10 @@ public class SeminarDao {
         long ab = rs.getLong("approved_by");
         s.setApprovedBy(rs.wasNull() ? null : ab);
         s.setApprovedAt(rs.getObject("approved_at", Instant.class));
+        if (withCounts) {
+            s.setLinkCount(rs.getInt("link_count"));
+            s.setDownloadCount(rs.getInt("download_count"));
+        }
         return s;
     }
 }

@@ -15,7 +15,7 @@
   <div class="col-md-4">
     <div class="card-quiet p-3">
       <div class="text-secondary small">Total seminars</div>
-      <div class="fs-3">${seminars.size()}</div>
+      <div class="fs-3">${totalCount}</div>
     </div>
   </div>
   <div class="col-md-4">
@@ -32,11 +32,39 @@
   </div>
 </div>
 
+<form class="card-quiet p-3 mb-3 sans" method="get" action="${pageContext.request.contextPath}/admin">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-6">
+      <label class="form-label small text-secondary mb-1" for="q">Search title or organiser</label>
+      <input class="form-control" id="q" name="q" value="${q}" placeholder="e.g. Cloud-Native" maxlength="120">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label small text-secondary mb-1" for="status">Status</label>
+      <select class="form-select" id="status" name="status">
+        <option value="" ${empty statusFilter ? 'selected' : ''}>All statuses</option>
+        <option value="DRAFT" ${statusFilter == 'DRAFT' ? 'selected' : ''}>Draft — upload design</option>
+        <option value="PENDING_APPROVAL" ${statusFilter == 'PENDING_APPROVAL' ? 'selected' : ''}>Pending developer approval</option>
+        <option value="APPROVED" ${statusFilter == 'APPROVED' ? 'selected' : ''}>Approved</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-navy w-100" type="submit">Filter</button>
+    </div>
+  </div>
+</form>
+
 <div class="card-quiet p-0 overflow-hidden">
   <c:choose>
     <c:when test="${empty seminars}">
       <div class="p-5 text-center text-secondary">
-        No seminars yet. Create one and upload the certificate artwork from the design team.
+        <c:choose>
+          <c:when test="${not empty q or not empty statusFilter}">
+            No seminars match this search. Clear the filters to see the full list.
+          </c:when>
+          <c:otherwise>
+            No seminars yet. Create one and upload the certificate artwork from the design team.
+          </c:otherwise>
+        </c:choose>
       </div>
     </c:when>
     <c:otherwise>
@@ -61,8 +89,8 @@
               </td>
               <td>${s.seminarDateLabel}</td>
               <td><span class="status-pill status-${s.status}">${s.statusLabel}</span></td>
-              <td>${linkCounts[s.id]}</td>
-              <td>${submissionCounts[s.id]}</td>
+              <td>${s.linkCount}</td>
+              <td>${s.downloadCount}</td>
               <td class="text-end">
                 <a class="btn btn-sm btn-navy" href="${pageContext.request.contextPath}/admin/seminars?id=${s.id}">Open</a>
               </td>
@@ -71,6 +99,7 @@
           </tbody>
         </table>
       </div>
+      <jsp:include page="/WEB-INF/jsp/includes/pager.jsp"/>
     </c:otherwise>
   </c:choose>
 </div>

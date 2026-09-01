@@ -21,6 +21,8 @@ public class Seminar {
     private Instant updatedAt;
     private Long approvedBy;
     private Instant approvedAt;
+    private int linkCount;
+    private int downloadCount;
 
     public boolean hasTemplate() {
         return templateRelpath != null && !templateRelpath.isBlank();
@@ -79,4 +81,8 @@ public class Seminar {
     public void setApprovedBy(Long approvedBy) { this.approvedBy = approvedBy; }
     public Instant getApprovedAt() { return approvedAt; }
     public void setApprovedAt(Instant approvedAt) { this.approvedAt = approvedAt; }
+    public int getLinkCount() { return linkCount; }
+    public void setLinkCount(int linkCount) { this.linkCount = linkCount; }
+    public int getDownloadCount() { return downloadCount; }
+    public void setDownloadCount(int downloadCount) { this.downloadCount = downloadCount; }
 }

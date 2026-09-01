@@ -4,13 +4,42 @@
 <jsp:include page="/WEB-INF/jsp/includes/header.jsp"/>
 
 <p class="brand-mark mb-1">Developer</p>
-<h1 class="h3 mb-4">Certificate alignment queue</h1>
-<p class="text-secondary sans">Open a seminar to place the six standard fields on its artwork. Approving the design lets the admin generate a public link.</p>
+<h1 class="h3 mb-2">Certificate alignment queue</h1>
+<p class="text-secondary sans">Pending work is listed first. Open a seminar to place fields on its artwork. Approving the design lets the admin generate a public link.</p>
+
+<form class="card-quiet p-3 mb-3 sans" method="get" action="${pageContext.request.contextPath}/developer">
+  <div class="row g-2 align-items-end">
+    <div class="col-md-6">
+      <label class="form-label small text-secondary mb-1" for="q">Search title or organiser</label>
+      <input class="form-control" id="q" name="q" value="${q}" placeholder="e.g. Faculty Development" maxlength="120">
+    </div>
+    <div class="col-md-4">
+      <label class="form-label small text-secondary mb-1" for="status">Status</label>
+      <select class="form-select" id="status" name="status">
+        <option value="" ${empty statusFilter ? 'selected' : ''}>All (pending first)</option>
+        <option value="PENDING_APPROVAL" ${statusFilter == 'PENDING_APPROVAL' ? 'selected' : ''}>Pending developer approval</option>
+        <option value="APPROVED" ${statusFilter == 'APPROVED' ? 'selected' : ''}>Approved</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-navy w-100" type="submit">Filter</button>
+    </div>
+  </div>
+</form>
 
 <div class="card-quiet p-0 overflow-hidden">
   <c:choose>
     <c:when test="${empty seminars}">
-      <div class="p-5 text-center text-secondary">No certificate images have been uploaded yet.</div>
+      <div class="p-5 text-center text-secondary">
+        <c:choose>
+          <c:when test="${not empty q or not empty statusFilter}">
+            No seminars match this search.
+          </c:when>
+          <c:otherwise>
+            No certificate images have been uploaded yet.
+          </c:otherwise>
+        </c:choose>
+      </div>
     </c:when>
     <c:otherwise>
       <div class="table-responsive">
@@ -40,6 +69,7 @@
           </tbody>
         </table>
       </div>
+      <jsp:include page="/WEB-INF/jsp/includes/pager.jsp"/>
     </c:otherwise>
   </c:choose>
 </div>
