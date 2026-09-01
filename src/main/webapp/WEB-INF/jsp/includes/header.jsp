@@ -37,9 +37,9 @@
             <button class="btn btn-sm btn-outline-light">Sign out</button>
           </form>
         </c:when>
-        <c:otherwise>
+        <c:when test="${not hideStaffSignIn}">
           <a class="btn btn-gold btn-sm" href="${pageContext.request.contextPath}/login">Staff sign in</a>
-        </c:otherwise>
+        </c:when>
       </c:choose>
     </nav>
   </div>
