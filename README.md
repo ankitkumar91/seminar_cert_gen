@@ -38,6 +38,10 @@ Attendee (shared URL)          Admin                         Developer
 
 Re-uploading a design returns the seminar to pending approval.
 
+### Admin accounts (developer)
+
+Developers can open **Admin accounts** to create a username and password for seminar admins, or revoke a login. Revoked accounts cannot sign in (including an already-open session). At least one active admin is kept so seminars can still be managed. Creating an admin with a previously revoked username restores that account with the new password.
+
 ### Fixed form fields (Section 5 — working set until the client confirms)
 
 These fields are identical for every seminar:

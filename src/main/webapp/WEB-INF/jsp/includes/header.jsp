@@ -31,6 +31,7 @@
           </c:if>
           <c:if test="${sessionScope.authUser.role == 'DEVELOPER'}">
             <a class="nav-link px-0" href="${pageContext.request.contextPath}/developer">Alignment queue</a>
+            <a class="nav-link px-0" href="${pageContext.request.contextPath}/developer/admins">Admin accounts</a>
           </c:if>
           <span class="small user-chip">${sessionScope.authUser.displayName}</span>
           <form method="post" action="${pageContext.request.contextPath}/logout" class="m-0">

@@ -9,14 +9,16 @@ public class User implements Serializable {
     private String username;
     private String displayName;
     private Role role;
+    private boolean active = true;
 
     public User() {}
 
-    public User(long id, String username, String displayName, Role role) {
+    public User(long id, String username, String displayName, Role role, boolean active) {
         this.id = id;
         this.username = username;
         this.displayName = displayName;
         this.role = role;
+        this.active = active;
     }
 
     public long getId() { return id; }
@@ -27,4 +29,6 @@ public class User implements Serializable {
     public void setDisplayName(String displayName) { this.displayName = displayName; }
     public Role getRole() { return role; }
     public void setRole(Role role) { this.role = role; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }

@@ -53,7 +53,8 @@ public final class Database {
                   username VARCHAR(64) NOT NULL UNIQUE,
                   password_hash VARCHAR(120) NOT NULL,
                   display_name VARCHAR(120) NOT NULL,
-                  role VARCHAR(20) NOT NULL
+                  role VARCHAR(20) NOT NULL,
+                  active BOOLEAN DEFAULT TRUE
                 )
                 """);
             st.execute("""
@@ -122,6 +123,8 @@ public final class Database {
             st.execute("CREATE INDEX IF NOT EXISTS idx_seminars_status ON seminars(status)");
             st.execute("CREATE INDEX IF NOT EXISTS idx_share_links_seminar ON share_links(seminar_id)");
             st.execute("CREATE INDEX IF NOT EXISTS idx_submissions_seminar ON submissions(seminar_id)");
+            trySql(st, "ALTER TABLE users ADD COLUMN IF NOT EXISTS active BOOLEAN DEFAULT TRUE");
+            trySql(st, "UPDATE users SET active = TRUE WHERE active IS NULL");
         }
     }
 

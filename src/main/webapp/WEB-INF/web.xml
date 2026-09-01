@@ -104,6 +104,15 @@
   </servlet-mapping>
 
   <servlet>
+    <servlet-name>AdminAccountsServlet</servlet-name>
+    <servlet-class>com.certify.servlet.dev.AdminAccountsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdminAccountsServlet</servlet-name>
+    <url-pattern>/developer/admins</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>AlignmentServlet</servlet-name>
     <servlet-class>com.certify.servlet.dev.AlignmentServlet</servlet-class>
   </servlet>

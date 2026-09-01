@@ -1,6 +1,7 @@
 package com.certify.filter;
 
 import com.certify.config.AppConfig;
+import com.certify.dao.UserDao;
 import com.certify.model.Role;
 import com.certify.model.User;
 import com.certify.util.WebUtil;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AuthFilter extends HttpFilter {
+    private final UserDao users = new UserDao();
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
@@ -24,6 +26,15 @@ public class AuthFilter extends HttpFilter {
             res.sendRedirect(req.getContextPath() + "/login");
             return;
         }
+        User live = users.find(user.getId());
+        if (live == null || !live.isActive()) {
+            session.invalidate();
+            WebUtil.flash(req, "warning", "This login has been revoked. Sign in with an active account.");
+            res.sendRedirect(req.getContextPath() + "/login");
+            return;
+        }
+        session.setAttribute(AppConfig.SESSION_USER, live);
+        user = live;
         String path = req.getServletPath();
         if (path.startsWith("/admin") && user.getRole() != Role.ADMIN) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN);
