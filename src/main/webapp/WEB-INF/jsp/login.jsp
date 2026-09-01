@@ -21,10 +21,6 @@
         </div>
         <button class="btn btn-navy w-100" type="submit">Sign in</button>
       </form>
-      <p class="small text-secondary mt-4 mb-0 sans">
-        Demo accounts — admin: <code>admin</code> / <code>Admin@123</code><br>
-        developer: <code>developer</code> / <code>Dev@123</code>
-      </p>
     </div>
   </div>
 </div>
