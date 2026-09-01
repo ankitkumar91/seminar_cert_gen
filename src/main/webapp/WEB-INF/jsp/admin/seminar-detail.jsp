@@ -87,7 +87,7 @@
               <div class="d-flex justify-content-between gap-2">
                 <span class="small ${link.expired ? 'text-danger' : 'text-success'}">${link.expired ? 'Expired' : 'Active'} · ${link.expiresAtLabel}</span>
               </div>
-              <div class="link-box mt-2" id="url-${link.id}">${publicBase}/c/${link.token}</div>
+              <div class="link-box mt-2">${publicBase}/c/${link.token}</div>
               <button class="btn btn-sm btn-outline-secondary mt-2 sans" type="button"
                       data-copy="${publicBase}/c/${link.token}">Copy link</button>
               <c:if test="${not empty link.note}"><div class="small text-secondary mt-1">${link.note}</div></c:if>

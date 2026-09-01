@@ -101,6 +101,8 @@ mvn -DskipTests package
 export CATALINA_OPTS="-Dcertify.data.dir=/var/lib/certify"
 ```
 
+Copy link on a seminar page works over HTTP as well as HTTPS (the clipboard API is blocked on plain HTTP, so the page falls back to `document.execCommand`). jQuery is shipped in the WAR, so the admin screens do not depend on `code.jquery.com`.
+
 ## Project layout
 
 ```
