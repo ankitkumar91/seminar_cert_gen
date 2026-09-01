@@ -3,7 +3,7 @@ package com.certify.util;
 import javax.servlet.http.HttpServletRequest;
 
 public final class Paging {
-    public static final int PAGE_SIZE = 25;
+    public static final int PAGE_SIZE = 15;
 
     private Paging() {}
 
